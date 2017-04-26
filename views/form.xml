@@ -1,0 +1,41 @@
+<Alloy>
+	<Window id="cardForm" onClose="$.cleanup">
+		<View id="navBarAndStatus">
+			<View id="nav" height="44" bottom="0">
+				<Button onClick="close" left="8">Close</Button>
+
+				<Label id="dataTitle" height="Ti.UI.SIZE" />
+			</View>
+			<View class="separator"/>
+		</View>
+
+		<ScrollView id="container">
+
+			<View id="form">
+				<TextField id="cardName" hintText="Nombre en Tarjeta"/>
+
+				<View class="separator"/>
+
+				<TextField id="cardNumber" hintText="Número de Tarjeta"/>
+
+				<View class="separator"/>
+
+				<View width="Ti.UI.FILL" height="44" layout="horizontal">
+					<TextField id="cardExpMonth" width="33%" hintText="Mes Exp." />
+					<TextField id="cardExpYear" width="33%" hintText="Año Exp." />
+					<TextField id="cardCvc" width="Ti.UI.FILL" hintText="CVC" />
+				</View>
+
+				<View class="separator" />
+
+				<View id="saveCardSwitchHolder" visible="false">
+					<Label>Save Card</Label>
+					<Switch id="saveCardSwitch" value="true"/>
+				</View>
+			</View>
+
+		</ScrollView>
+
+		<Button id="submit" class="button" onClick="submit" title="Pagar"/>
+	</Window>
+</Alloy>

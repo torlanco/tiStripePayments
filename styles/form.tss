@@ -1,0 +1,61 @@
+/*design reference: https://designcode.io/iosdesign-guidelines */
+
+"#navBarAndStatus": {
+    height: 64,
+    top:0
+}
+
+".separator" : {
+    width: Ti.UI.FILL,
+    height: 0.5,
+    bottom: 0,
+    backgroundColor:"gray",
+}
+
+"#cardsSection": {
+    width: Ti.UI.FILL,
+    height: 200,
+    showPagingControl: true,
+    top: 20
+}
+
+"#container": {
+    width: Ti.UI.FILL,
+    height: Ti.UI.FILL,
+    top: 64,
+    bottom: 44,
+    layout: "vertical",
+}
+
+"#submit": {
+	borderRadius: 0,
+	bottom: 0,
+    height:44
+}
+
+"#form": {
+    width: Ti.UI.FILL,
+    height: Ti.UI.SIZE,
+    layout: "vertical",
+}
+
+"TextField": {
+    left:10,
+    right:10,
+    font:{
+        fontSize: 17
+    },
+    height: 44
+}
+
+"#saveCardSwitchHolder": {
+    layout:"horizontal",
+    height: 44,
+    top:10,
+    right: 8,
+    width: Ti.UI.SIZE,
+}
+
+"#saveCardSwitch": {
+    left:10
+}
