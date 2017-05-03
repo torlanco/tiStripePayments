@@ -1,1 +1,32 @@
-<Alloy/>
+<Alloy>
+    <ListView id="list" defaultItemTemplate="card">
+        <Templates>
+            <ItemTemplate name="card">
+                <ImageView bindId="icon" class="icon"/>
+                <Label bindId="title" class="title" />
+                <ImageView bindId="image" class="image" />
+            </ItemTemplate>
+
+            <ItemTemplate name="new">
+                <Label bindId="title" class="newTitle" />
+            </ItemTemplate>
+        </Templates>
+
+        <!-- <ListSection id="cardsSection" dataCollection="cards" dataTransform="transformCard" dataFunction="updateCards"> -->
+        <ListSection>
+            <HeaderView>
+                <View class="sectionSeparator">
+                    <Label text="METODO DE PAGO" class="headerTitle"/>
+                </View>
+            </HeaderView>
+
+            <!-- FOR TESTING -->
+            <ListItem title:text="2341 **** **00 1235" itemId="1" template="card">
+            </ListItem>
+        </ListSection>
+
+        <ListSection id="newCardSection">
+            <ListItem title:text="+ TARJETA" itemId="newCard" template="new" />
+        </ListSection>
+    </ListView>
+</Alloy>

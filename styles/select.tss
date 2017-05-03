@@ -1,0 +1,43 @@
+".sectionSeparator" : {
+    width: Ti.UI.FILL,
+    height: 50,
+    backgroundColor: "#FAFAFA",
+    borderColor: "#E0E0E0",
+    borderWidth: 0.5
+}
+
+".headerTitle": {
+    left: 20,
+    font: {
+        // fontFamily: "LucidaGrande-Bold",
+        fontSize: 15
+    }
+
+}
+
+".icon": {
+    left: 20,
+    touchEnabled: false
+}
+".title": {
+    left: 90,
+    touchEnabled: false,
+    font: {
+        // fontFamily: "LucidaGrande-Bold",
+        fontSize: 12
+    }
+}
+".image": {
+    right: 20,
+    touchEnabled: false,
+    image: WPATH("/images/arrow_right.png")
+}
+
+".newTitle": {
+    right: 20,
+    color: '#000',
+    font: {
+        // fontFamily: "LucidaGrande-Bold",
+        fontSize: 15
+    },
+}
