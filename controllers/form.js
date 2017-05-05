@@ -31,8 +31,9 @@ function submit(e){
     switch (args.varType) {
         case "add":
             // function(customerId, token, name, number, cvc, month, year, successCallback, errorCallback)
-            stripe.createCard(stripe.getStripeId(), token, $.cardName.value, $.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, successCallback, function(e){
-                alert(e);
+            stripe.createCard(stripe.getStripeId(), false, $.cardName.value, $.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, successCallback, function(e){
+                if (e.error && e.error.message) alert(e.error.message);
+                else alert(e);
             });
             break;
         case "edit":
@@ -55,9 +56,20 @@ function submit(e){
                     });
                 }
             }, function(e){
-                alert(e);
+                if (e.error && e.error.message) alert(e.error.message);
+                else alert(e);
             });
     }
+}
+
+function successCallback(e) {
+    console.warn('SUCCESS');
+    close();
+}
+
+function errorCallback(e) {
+    console.error('ERROR', e);
+    close();
 }
 
 $.cleanup = function() {

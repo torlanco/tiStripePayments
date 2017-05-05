@@ -1,5 +1,5 @@
 <Alloy>
-	<Window id="cardForm" onClose="$.cleanup">
+	<Window id="cardForm" onClose="$.cleanup" backgroundColor="white">
 		<View id="navBarAndStatus">
 			<View id="nav" height="44" bottom="0">
 				<Button onClick="close" left="8">Close</Button>

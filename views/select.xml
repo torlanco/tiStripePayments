@@ -1,5 +1,5 @@
 <Alloy>
-    <ListView id="list" defaultItemTemplate="card">
+    <ListView id="list" defaultItemTemplate="card" onItemclick="onItemclick">
         <Templates>
             <ItemTemplate name="card">
                 <ImageView bindId="icon" class="icon"/>
@@ -12,8 +12,7 @@
             </ItemTemplate>
         </Templates>
 
-        <!-- <ListSection id="cardsSection" dataCollection="cards" dataTransform="transformCard" dataFunction="updateCards"> -->
-        <ListSection>
+        <ListSection id="cardsSection" dataCollection="Alloy.Collections.cards" dataTransform="transformCard" dataFunction="updateCards">
             <HeaderView>
                 <View class="sectionSeparator">
                     <Label text="METODO DE PAGO" class="headerTitle"/>
@@ -21,7 +20,7 @@
             </HeaderView>
 
             <!-- FOR TESTING -->
-            <ListItem title:text="2341 **** **00 1235" itemId="1" template="card">
+            <ListItem title:text="{title}" itemId="{id}" template="card">
             </ListItem>
         </ListSection>
 
