@@ -17,14 +17,15 @@
 
 ".icon": {
     left: 20,
-    touchEnabled: false
+    touchEnabled: false,
+    font: { fontFamily: 'FontAwesome' }
 }
 ".title": {
     left: 90,
     touchEnabled: false,
     font: {
         // fontFamily: "LucidaGrande-Bold",
-        fontSize: 12
+        fontSize: 14
     }
 }
 ".image": {

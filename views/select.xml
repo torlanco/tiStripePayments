@@ -2,7 +2,7 @@
     <ListView id="list" defaultItemTemplate="card" onItemclick="onItemclick">
         <Templates>
             <ItemTemplate name="card">
-                <ImageView bindId="icon" class="icon"/>
+                <Label bindId="icon" class="icon"/>
                 <Label bindId="title" class="title" />
                 <ImageView bindId="image" class="image" />
             </ItemTemplate>
@@ -20,7 +20,7 @@
             </HeaderView>
 
             <!-- FOR TESTING -->
-            <ListItem title:text="{title}" itemId="{id}" template="card">
+            <ListItem icon:text="{icon}" title:text="{title}" itemId="{id}" template="card">
             </ListItem>
         </ListSection>
 
