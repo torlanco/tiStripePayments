@@ -1,39 +1,45 @@
-var args = arguments[0] || {};
-
-// ToDo - it would be cool to have the stripeId here, we would need it to be persistent
-
+// TODO - it would be cool to have the stripeId here, we would need it to be persistent
 var stripe = require(WPATH('stripe'));
 console.log(stripe.getStripeId());
 
-var card;
-var action;
+$.card = $.args.cardId ? Alloy.Collections.cards.get($.args.cardId).toJSON() : {};
 
-switch (args.varType) {
+switch ($.args.varType) {
     case "add":
         title = "Add";
         break;
     case "edit":
         title = "Edit";
-        card = Alloy.Collections.cards.get(args.cardId);
-        $.cardName.value = card.get('name');
-        $.cardExpMonth.value = card.get('exp_month');
-        $.cardExpYear.value = card.get('exp_year');
+        setData($.card);
 
-        // FIXME: NO EDITABLE NOW
+        // FIXME
         $.cardNumber.editable = false;
-        $.cardNumber.value = stripe.generateCardNumber(card.get('last4'));
-
         $.cardCvc.editable = false;
-        $.cardCvc.value = '\u00B7\u00B7\u00B7';
         break;
     case "pay":
-        $.saveCardSwitchHolder.visible = true;
         title = "Pay";
+        setData($.card);
+
+        $.cardName.editable = false;
+        $.cardExpMonth.editable = false;
+        $.cardExpYear.editable = false;
+        $.cardNumber.editable = false;
+        $.cardCvc.editable = false;
+
+        $.saveCardSwitchHolder.visible = true;
 }
 
 $.cardForm.open();
 $.dataTitle.text = title;
-if (args.varType !== 'Pay') $.submit.title = 'Submit';
+if ($.args.varType !== 'pay') $.submit.title = 'Submit';
+
+function setData(card) {
+    $.cardName.value = $.card.name;
+    $.cardExpMonth.value = $.card.exp_month;
+    $.cardExpYear.value = $.card.exp_year;
+    $.cardNumber.value = stripe.generateCardNumber($.card.last4);
+    $.cardCvc.value = '\u00B7\u00B7\u00B7';
+}
 
 function close(e){
     $.cleanup();
@@ -41,7 +47,7 @@ function close(e){
 }
 
 function submit(e){
-    switch (args.varType) {
+    switch ($.args.varType) {
         case "add":
             stripe.createCard(stripe.getStripeId(),
                 false, // token
@@ -60,7 +66,7 @@ function submit(e){
             // ToDo what about cvv and number?
             // function(customerId, cardId, name, month, year, successCallback, errorCallback)
             stripe.updateCard(stripe.getStripeId(),
-                card.get('id'),
+                $.card.id,
                 $.cardName.value,
                 $.cardExpMonth.value,
                 $.cardExpYear.value,

@@ -30,7 +30,8 @@
 "#submit": {
 	borderRadius: 0,
 	bottom: 0,
-    height:44
+    height:44,
+    width: 200,
 }
 
 "#form": {

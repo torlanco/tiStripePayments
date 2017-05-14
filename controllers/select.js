@@ -1,5 +1,4 @@
 var stripe = require(WPATH('stripe'));
-
 stripe.fetchCards(stripe.getStripeId());
 
 var cardIconCodes = {
@@ -28,7 +27,7 @@ function onItemclick(e) {
     }
     else if (item.template === 'card') {
         Alloy.createWidget("com.mlstudio.payment", "form", {
-            varType: 'edit',
+            varType: $.args.type === 'pay-select' ? 'pay' : 'edit',
             cardId: item.properties.itemId,
         }).getView().open({ modal: true });
     }
