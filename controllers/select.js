@@ -2,8 +2,6 @@ var stripe = require(WPATH('stripe'));
 
 stripe.fetchCards(stripe.getStripeId());
 
-console.log(Alloy.Collections.cards.toJSON());
-
 var cardIconCodes = {
     'Visa': '\uF1F0',
     'Mastercard': '\uF1F1',
@@ -15,11 +13,9 @@ var cardIconCodes = {
 
 function transformCard(model) {
     var transformed = model.toJSON();
-    // TODO: add icon of card here based on transformed.brand
     transformed.icon = cardIconCodes[transformed.brand] || '';
+    transformed.title = stripe.generateCardNumber(transformed.last4);
 
-    transformed.title =
-        '\u00B7\u00B7\u00B7\u00B7 \u00B7\u00B7\u00B7\u00B7 \u00B7\u00B7\u00B7\u00B7 ' + transformed.last4;
     return transformed;
 }
 
@@ -28,6 +24,12 @@ function onItemclick(e) {
     if (item.template === 'new') {
         Alloy.createWidget("com.mlstudio.payment", "form", {
             varType: 'add'
+        }).getView().open({ modal: true });
+    }
+    else if (item.template === 'card') {
+        Alloy.createWidget("com.mlstudio.payment", "form", {
+            varType: 'edit',
+            cardId: item.properties.itemId,
         }).getView().open({ modal: true });
     }
 }

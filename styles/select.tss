@@ -25,7 +25,7 @@
     touchEnabled: false,
     font: {
         // fontFamily: "LucidaGrande-Bold",
-        fontSize: 14
+        fontSize: 12
     }
 }
 ".image": {
