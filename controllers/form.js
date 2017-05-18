@@ -27,6 +27,10 @@ switch ($.args.varType) {
         $.cardCvc.editable = false;
 
         $.saveCardSwitchHolder.visible = true;
+
+        $.amount = $.args.amount || 0;
+        $.currency = $.args.currency || 'USD';
+        $.description = $.args.description || 'Testing';
 }
 
 $.cardForm.open();
@@ -75,23 +79,31 @@ function submit(e){
             );
             break;
         case "pay":
+            if ($.card) {
+                return stripe.charges($.amount, 'USD', 'Testing', $.card.customer, function success(e) {
+                    console.info(e);
+                });
+            }
+
             // function(number, cvc, month, year, successCallback, errorCallback)
-            stripe.createCardToken($.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, function(e){
-                console.log("response from success");
-                if($.saveCardSwitch.value){
-                    // function(customerId, token, name, number, cvc, month, year, successCallback, errorCallback)
-                    stripe.createCard(stripe.getStripeId(), e.id, $.cardName.value, $.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, function(e){
-                        console.log('saved');
-                        // console.log(e);
-                    }, function(e){
-                        console.log('error on save');
-                        // console.log(e);
-                    });
-                }
-            }, function(e){
-                if (e.error && e.error.message) alert(e.error.message);
-                else alert(e);
-            });
+            // stripe.createCardToken($.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, function(e){
+            //     console.log("response from success");
+            //     // save card if need
+            //     if($.saveCardSwitch.value) {
+            //         // function(customerId, token, name, number, cvc, month, year, successCallback, errorCallback)
+            //         stripe.createCard(stripe.getStripeId(), e.id, $.cardName.value, $.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, function(e){
+            //             console.log('saved');
+            //             // console.log(e);
+            //         }, function(e){
+            //             console.log('error on save');
+            //             // console.log(e);
+            //         });
+            //     }
+
+            // }, function(e){
+            //     if (e.error && e.error.message) alert(e.error.message);
+            //     else alert(e);
+            // });
     }
 }
 
