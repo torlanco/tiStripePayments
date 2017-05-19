@@ -2,7 +2,7 @@
 var stripe = require(WPATH('stripe'));
 console.log(stripe.getStripeId());
 
-$.card = $.args.cardId ? Alloy.Collections.cards.get($.args.cardId).toJSON() : {};
+$.card = $.args.cardId ? Alloy.Collections.cards.get($.args.cardId).toJSON() : null;
 
 switch ($.args.varType) {
     case "add":
@@ -18,22 +18,23 @@ switch ($.args.varType) {
         break;
     case "pay":
         title = "Pay";
-        setData($.card);
+        if (!_.isEmpty($.card)) {
+            setData($.card);
 
-        $.cardName.editable = false;
-        $.cardExpMonth.editable = false;
-        $.cardExpYear.editable = false;
-        $.cardNumber.editable = false;
-        $.cardCvc.editable = false;
+            $.cardName.editable = false;
+            $.cardExpMonth.editable = false;
+            $.cardExpYear.editable = false;
+            $.cardNumber.editable = false;
+            $.cardCvc.editable = false;
+        }
 
         $.saveCardSwitchHolder.visible = true;
 
-        $.amount = $.args.amount || 0;
+        $.amount = $.args.amount || 100;
         $.currency = $.args.currency || 'USD';
         $.description = $.args.description || 'Testing';
 }
 
-$.cardForm.open();
 $.dataTitle.text = title;
 if ($.args.varType !== 'pay') $.submit.title = 'Submit';
 
@@ -53,18 +54,14 @@ function close(e){
 function submit(e){
     switch ($.args.varType) {
         case "add":
-            stripe.createCard(stripe.getStripeId(),
-                false, // token
-                $.cardName.value,
-                $.cardNumber.value,
-                $.cardCvc.value,
-                $.cardExpMonth.value,
-                $.cardExpYear.value,
-                successCallback,
-                function errorCallback(e) {
-                    if (e.error && e.error.message) alert(e.error.message);
-                    else alert(e);
-                });
+            createCard(false, function success(e) {
+                console.info('CREATED');
+                close();
+            }, function error(e) {
+                console.error('ERROR ON CREATE', e);
+                if (e.error && e.error.message) alert(e.error.message);
+                else alert(e);
+            });
             break;
         case "edit":
             // ToDo what about cvv and number?
@@ -80,31 +77,67 @@ function submit(e){
             break;
         case "pay":
             if ($.card) {
-                return stripe.charges($.amount, 'USD', 'Testing', $.card.customer, function success(e) {
-                    console.info(e);
-                });
+                return stripe.charges($.amount, $.currency, $.description, $.card.customer,
+                    function success(e) {
+                        console.info(e);
+                    }
+                );
             }
+            else {
+                stripe.createCardToken(
+                    $.cardNumber.value,
+                    $.cardCvc.value,
+                    $.cardExpMonth.value,
+                    $.cardExpYear.value,
+                    function success(token) {
+                        console.log('token', token);
+                        if($.saveCardSwitch.value) {
+                            createCard(token, function success(card) {
+                                card = card.toJSON()
+                                console.info('SAVED', card);
 
-            // function(number, cvc, month, year, successCallback, errorCallback)
-            // stripe.createCardToken($.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, function(e){
-            //     console.log("response from success");
-            //     // save card if need
-            //     if($.saveCardSwitch.value) {
-            //         // function(customerId, token, name, number, cvc, month, year, successCallback, errorCallback)
-            //         stripe.createCard(stripe.getStripeId(), e.id, $.cardName.value, $.cardNumber.value, $.cardCvc.value, $.cardExpMonth.value, $.cardExpYear.value, function(e){
-            //             console.log('saved');
-            //             // console.log(e);
-            //         }, function(e){
-            //             console.log('error on save');
-            //             // console.log(e);
-            //         });
-            //     }
+                                // charge
+                                return stripe.charges($.amount, $.currency, $.description, card.customer, null,
+                                    function success(e) {
+                                        console.info('CHARGED', e);
+                                        alert('CHARGED');
+                                    }
+                                );
+                            }, function error(e) {
+                                console.error('ERROR ON SAVE', e);
+                            });
+                        }
+                        else {
+                            // charge
+                            return stripe.charges($.amount, $.currency, $.description, null, token,
+                                function success(e) {
+                                    console.info('CHARGED', e);
+                                    alert('CHARGED');
+                                }
+                            );
+                        }
 
-            // }, function(e){
-            //     if (e.error && e.error.message) alert(e.error.message);
-            //     else alert(e);
-            // });
+                    }, function error(e){
+                        if (e.error && e.error.message) alert(e.error.message);
+                        else alert(e);
+                    }
+                );
+            }
     }
+}
+
+function createCard(customerId, successCallback, errorCallback) {
+    stripe.createCard(
+        stripe.getStripeId(),
+        customerId, // token
+        $.cardName.value,
+        $.cardNumber.value,
+        $.cardCvc.value,
+        $.cardExpMonth.value,
+        $.cardExpYear.value,
+        successCallback,
+        errorCallback
+    );
 }
 
 function successCallback(e) {
